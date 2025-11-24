@@ -6,7 +6,7 @@
 /*   By: asylla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 14:36:26 by asylla            #+#    #+#             */
-/*   Updated: 2025/11/24 15:23:41 by asylla           ###   ########.fr       */
+/*   Updated: 2025/11/24 15:36:45 by asylla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,9 +108,13 @@ char	*get_next_line(int fd)
 	if (!stash)
 		return (NULL);
 	line = line_extract(stash);
-	stash = stash_clean(stash);
-	if (line == 0)
+	if (!line)
+	{
 		free(stash);
+		stash = NULL;
+		return (NULL);
+	}
+	stash = stash_clean(stash);
 	return (line);
 }
 
