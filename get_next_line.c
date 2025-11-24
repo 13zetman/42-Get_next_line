@@ -6,7 +6,7 @@
 /*   By: asylla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 14:36:26 by asylla            #+#    #+#             */
-/*   Updated: 2025/11/24 15:36:45 by asylla           ###   ########.fr       */
+/*   Updated: 2025/11/24 15:48:01 by asylla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ static char	*read_file(int fd, char *stash)
 
 	buffer = malloc(BUFFER_SIZE + 1);
 	if (!buffer)
+	{
+		free(stash);
 		return (NULL);
+	}
 	bytes_size = 1;
 	while (!ft_strchr(stash, '\n') && bytes_size > 0)
 	{
@@ -35,8 +38,11 @@ static char	*read_file(int fd, char *stash)
 		free(tmp);
 	}
 	free(buffer);
-	if (bytes_size < 0)
+	if (bytes_size < 0 || (bytes_size == 0 (!stash || !stash[0])))
+	{
+		free(stash);
 		return (NULL);
+	}
 	return (stash);
 }
 
