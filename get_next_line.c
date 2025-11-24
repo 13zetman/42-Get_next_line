@@ -6,7 +6,7 @@
 /*   By: asylla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 14:36:26 by asylla            #+#    #+#             */
-/*   Updated: 2025/11/24 15:48:01 by asylla           ###   ########.fr       */
+/*   Updated: 2025/11/24 16:01:43 by asylla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,33 +16,29 @@
 
 static char	*read_file(int fd, char *stash)
 {
-	int		bytes_size;
-	char	*buffer;
+	int		r;
+	char	*buf;
 	char	*tmp;
 
-	buffer = malloc(BUFFER_SIZE + 1);
-	if (!buffer)
+	buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buf)
+		return (free(stash), NULL);
+	r = 1;
+	while ((!stash || !ft_strchr(stash, '\n')) && r > 0)
 	{
-		free(stash);
-		return (NULL);
-	}
-	bytes_size = 1;
-	while (!ft_strchr(stash, '\n') && bytes_size > 0)
-	{
-		bytes_size = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_size <= 0)
+		r = read(fd, buf, BUFFER_SIZE);
+		if (r == -1)
+			return (free(buf), free(stash), NULL);
+		if (r == 0)
 			break ;
-		buffer[bytes_size] = '\0';
+		buf[r] = '\0';
 		tmp = stash;
-		stash = ft_strjoin(tmp, buffer);
+		stash = ft_strjoin(tmp, buf);
 		free(tmp);
+		if (!stash)
+			return (free(buf), NULL);
 	}
-	free(buffer);
-	if (bytes_size < 0 || (bytes_size == 0 (!stash || !stash[0])))
-	{
-		free(stash);
-		return (NULL);
-	}
+	free(buf);
 	return (stash);
 }
 
@@ -123,7 +119,7 @@ char	*get_next_line(int fd)
 	stash = stash_clean(stash);
 	return (line);
 }
-
+/*
 int	main(void)
 {
 	int		fd;
@@ -144,3 +140,4 @@ int	main(void)
 	close(fd);
 	return (0);
 }
+*/
